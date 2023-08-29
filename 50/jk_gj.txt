@@ -1,0 +1,18 @@
+
+proc sql;
+create table hra.gj as
+select jk.person_id, jk.sex, jk.age, sido, dth_mdy, gj.*
+from raw.nhis_heals_jk as jk
+inner join raw.nhis_heals_gj as gj 
+    on jk.person_id = gj.person_id 
+    and jk.STND_Y = gj.HCHK_YEAR
+where age<75 and HCHK_YEAR in ('2009','2010','2011','2012','2013','2014','2015');
+quit;
+
+proc sql;
+create table hra.jk as
+select person_id, min(STND_Y) as min_year, max(STND_Y) as max_year
+from raw.nhis_heals_jk
+where STND_Y in ('2009','2010','2011','2012','2013','2014','2015')
+group by person_id;
+quit;

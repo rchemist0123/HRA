@@ -1,0 +1,325 @@
+/* cardiovascular */
+ods csv file='/userdata02/room011/working/HRA/major_illness/mi.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where 
+    substr(main_sick,1,4) in ('I210','I211','I212','I213','I214','I219','I220','I221','I228','I229') or
+    substr(sub_sick,1,4) in ('I210','I211','I212','I213','I214','I219','I220','I221','I228','I229')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1 
+where 
+    substr(main_sick,1,4) in ('I210','I211','I212','I213','I214','I219','I220','I221','I228','I229') or
+    substr(sub_sick,1,4) in ('I210','I211','I212','I213','I214','I219','I220','I221','I228','I229');
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/peri_vascular.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) = 'I73' or substr(sub_sick,1,3) = 'I73'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) = 'I73' or substr(sub_sick,1,3) = 'I73';
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/heart_failure.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('I09','I11','I43', 'I50') or
+    substr(main_sick,1,4) in ('I130','I132','I255','I420','I425','I426','I427','I428','I429') or
+    substr(sub_sick,1,3) in ('I09','I11','I43', 'I50') or
+    substr(sub_sick,1,4) in ('I130','I132','I255','I420','I425','I426','I427','I428','I429')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('I09','I11','I43', 'I50') or
+    substr(main_sick,1,4) in ('I130','I132','I255','I420','I425','I426','I427','I428','I429') or
+    substr(sub_sick,1,3) in ('I09','I11','I43', 'I50') or
+    substr(sub_sick,1,4) in ('I130','I132','I255','I420','I425','I426','I427','I428','I429');
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/angina.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3)='I20' or substr(sub_sick,1,3) = 'I20'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3)='I20' or substr(sub_sick,1,3) = 'I20';
+quit;
+ods csv close;
+
+
+/* neurovascular (Stroke) */
+ods csv file='/userdata02/room011/working/HRA/major_illness/stroke.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('I60','I61','I62','I63','I64','I65','I66','I67','I68','I69') or
+    substr(sub_sick,1,3) in ('I60','I61','I62','I63','I64','I65','I66','I67','I68','I69')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('I60','I61','I62','I63','I64','I65','I66','I67','I68','I69') or
+    substr(sub_sick,1,3) in ('I60','I61','I62','I63','I64','I65','I66','I67','I68','I69');
+quit;
+ods csv close;
+
+
+/* mild or severe liver disease */
+ods csv file='/userdata02/room011/working/HRA/major_illness/liver.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('K74','K71','K72','I85','R18') or
+    substr(sub_sick,1,4) in ('K703','I864','B190')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('K74','K71','K72','I85','R18') or
+    substr(sub_sick,1,4) in ('K703','I864','B190');
+quit;
+ods csv close;
+
+/*severe renal*/
+ods csv file='/userdata02/room011/working/HRA/major_illness/renal.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('I13','N19','Z49') or
+    substr(main_sick,1,4) in ('I120','N185','N189','Z992') or
+    substr(sub_sick,1,3) in ('I13','N19','Z49') or
+    substr(sub_sick,1,4) in ('I120','N185','N189','Z992')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('I13','N19','Z49') or
+    substr(main_sick,1,4) in ('I120','N185','N189','Z992') or
+    substr(sub_sick,1,3) in ('I13','N19','Z49') or
+    substr(sub_sick,1,4) in ('I120','N185','N189','Z992');
+quit;
+ods csv close;
+
+
+/*chronic pulmonary disease*/
+ods csv file='/userdata02/room011/working/HRA/major_illness/copd.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,4) in ('J431','J432','J433','J434','J435','J436','J437','J438','J439') or
+    substr(main_sick,1,3) = 'J44' or 
+    substr(sub_sick,1,4) in ('J431','J432','J433','J434','J435','J436','J437','J438','J439') or
+    substr(sub_sick,1,3) = 'J44'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,4) in ('J431','J432','J433','J434','J435','J436','J437','J438','J439') or
+    substr(main_sick,1,3) = 'J44' or 
+    substr(sub_sick,1,4) in ('J431','J432','J433','J434','J435','J436','J437','J438','J439') or
+    substr(sub_sick,1,3) = 'J44';
+quit;
+ods csv close;
+
+
+/*complicated DM*/
+ods csv file='/userdata02/room011/working/HRA/major_illness/complicated_dm.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,4) in ('E102','E103','E104','E105','E106','E107','E108',
+ 'E112','E113','E114','E115','E116','E117','E118',
+ 'E122','E123','E124','E125','E126','E127','E128',
+ 'E132','E133','E134','E135','E136','E137','E138',
+ 'E142','E143','E144','E145','E146','E147','E148') or
+    substr(sub_sick,1,4) in ('E100','E101', 'E102','E103','E104','E105','E106','E107','E108',
+'E110','E111', 'E112','E113','E114','E115','E116','E117','E118',
+'E120','E121', 'E122','E123','E124','E125','E126','E127','E128',
+'E130','E131', 'E132','E133','E134','E135','E136','E137','E138',
+'E140','E141', 'E142','E143','E144','E145','E146','E147','E148')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,4) in ('E100','E101', 'E102','E103','E104','E105','E106','E107','E108',
+'E110','E111', 'E112','E113','E114','E115','E116','E117','E118',
+'E120','E121', 'E122','E123','E124','E125','E126','E127','E128',
+'E130','E131', 'E132','E133','E134','E135','E136','E137','E138',
+'E140','E141', 'E142','E143','E144','E145','E146','E147','E148') or
+    substr(sub_sick,1,4) in ('E100','E101', 'E102','E103','E104','E105','E106','E107','E108',
+'E110','E111', 'E112','E113','E114','E115','E116','E117','E118',
+'E120','E121', 'E122','E123','E124','E125','E126','E127','E128',
+'E130','E131', 'E132','E133','E134','E135','E136','E137','E138',
+'E140','E141', 'E142','E143','E144','E145','E146','E147','E148');
+quit;
+ods csv close;
+
+
+/*cancer & metastatic cancer*/
+ods csv file='/userdata02/room011/working/HRA/major_illness/cancer_lymphonia.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('C81','C82','C83','C84','C85','C88','C96') or
+    substr(main_sick,1,4) in ('C900','C902') or
+    substr(sub_sick,1,3) in ('C81','C82','C83','C84','C85','C88','C96') or
+    substr(sub_sick,1,4) in ('C900','C902')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('C81','C82','C83','C84','C85','C88','C96') or
+    substr(main_sick,1,4) in ('C900','C902') or
+    substr(sub_sick,1,3) in ('C81','C82','C83','C84','C85','C88','C96') or
+    substr(sub_sick,1,4) in ('C900','C902');
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/cancer_meta.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('C77','C78','C79','C80') or
+    substr(sub_sick,1,3) in  ('C77','C78','C79','C80')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('C77','C78','C79','C80') or
+    substr(sub_sick,1,3) in  ('C77','C78','C79','C80');
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/cancer_nonmeta.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('C16','C18','C19','C20','C21','C22','C33','C34','C45', 'C50','C53','C61','D05','D06') or
+    substr(main_sick,1,4) in ('C384','C467','D010','D013','D022','D075') or
+    substr(sub_sick,1,3) in ('C16','C18','C19','C20','C21','C22','C33','C34','C45', 'C50','C53','C61','D05','D06') or
+    substr(sub_sick,1,4) in ('C384','C467','D010','D013','D022','D075')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('C16','C18','C19','C20','C21','C22','C33','C34','C45', 'C50','C53','C61','D05','D06') or
+substr(main_sick,1,4) in ('C384','C467','D010','D013','D022','D075') or
+substr(sub_sick,1,3) in ('C16','C18','C19','C20','C21','C22','C33','C34','C45', 'C50','C53','C61','D05','D06') or
+substr(sub_sick,1,4) in ('C384','C467','D010','D013','D022','D075');
+quit;
+ods csv close;
+
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/rheumatic.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('M05','M06') or
+    substr(sub_sick,1,3) in ('M05','M06')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('M05','M06') or
+    substr(sub_sick,1,3) in ('M05','M06');
+quit;
+ods csv close;
+
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/plegia.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('G80','G81','G82','G83') or
+    substr(main_sick,1,4) ='G114' or
+    substr(sub_sick,1,3) in ('G80','G81','G82','G83') or
+    substr(sub_sick,1,4) ='G114'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('G80','G81','G82','G83') or
+    substr(main_sick,1,4) ='G114' or
+    substr(sub_sick,1,3) in ('G80','G81','G82','G83') or
+    substr(sub_sick,1,4) ='G114';
+quit;
+ods csv close;
+
+
+/*Cognitive disorder*/
+ods csv file='/userdata02/room011/working/HRA/major_illness/parkinson.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) = 'G20' or
+    substr(sub_sick,1,3) = 'G20'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) = 'G20' or
+    substr(sub_sick,1,3) = 'G20';
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/dementia.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('F00','F01','F02','F03','G30') or
+    substr(sub_sick,1,3) in ('F00','F01','F02','F03','G30')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('F00','F01','F02','F03','G30') or
+    substr(sub_sick,1,3) in ('F00','F01','F02','F03','G30');
+quit;
+ods csv close;
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/schizophrenia.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) = 'F20' or substr(sub_sick,1,3) = 'F20'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) = 'F20' or substr(sub_sick,1,3) = 'F20';
+quit;
+ods csv close;
+
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/depression.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,4) in (
+    'F320','F321','F322','F323','F328','F329','F330','F331','F332',
+    'F333','F334','F338','F339') or
+    substr(sub_sick,1,4) in (
+    'F320','F321','F322','F323','F328','F329','F330','F331','F332',
+    'F333','F334','F338','F339')
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,4) in (
+    'F320','F321','F322','F323','F328','F329','F330','F331','F332',
+    'F333','F334','F338','F339') or
+    substr(sub_sick,1,4) in (
+    'F320','F321','F322','F323','F328','F329','F330','F331','F332',
+    'F333','F334','F338','F339');
+quit;
+ods csv close;
+
+
+ods csv file='/userdata02/room011/working/HRA/major_illness/alcohol_misuse.csv'
+proc sql;
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) ='F10' or substr(sub_sick,1,3) = 'F10'
+union all
+select person_id, recu_fr_dt, form_cd
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) ='F10' or substr(sub_sick,1,3) = 'F10';
+quit;
+ods csv close;

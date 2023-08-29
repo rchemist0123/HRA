@@ -1,0 +1,124 @@
+MACE
+
+ods csv file='/userdata02/room011/working/HRA/MACE/cvd_disease.csv';
+proc sql;
+select t1.PERSON_ID, 
+    min(RECU_FR_DT) as FIRST_DIAG_DATE,
+    min(DTH_MDY) as DEATH_DATE
+from raw.nhis_heals_gy20_t1 as t1
+inner join raw.nhis_heals_jk as jk on jk.person_id = t1.person_id
+where form_cd=2 and (substr(main_sick,1,4) in (
+    'I210','I211','I212','I213','I214','I219','I220','I221','I228','I229',
+    'I200','I509','I469','R570'
+) or
+substr(main_sick,1,3) in (
+    'I60','I61','I62','I63','I64','I65','I66','I67','I68','I69',
+    'I23','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49',
+    'I51','I52'
+substr(sub_sick,1,4) in (
+    'I210','I211','I212','I213','I214','I219','I220','I221','I228','I229',
+    'I200','I509','I469','R570'
+) or
+substr(sub_sick,1,3) in (
+    'I60','I61','I62','I63','I64','I65','I66','I67','I68','I69',
+    'I23','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49',
+    'I51','I52' 
+))
+group by t1.PERSON_ID
+union all
+select PERSON_ID, 
+    min(RECU_FR_DT) as FIRST_DIAG_DATE,
+    min(DTH_MDY) as DEATH_DATE
+from raw1619.nhis_heals_gy20_1619_t1 as t1
+inner join raw1619.nhis_heals_jk_1619 as jk on jk.person_id = t1.person_id
+where form_cd = 2 and (substr(main_sick,1,4) in (
+    'I210','I211','I212','I213','I214','I219','I220','I221','I228','I229',
+    'I200','I509','I469','R570'
+) or
+substr(main_sick,1,3) in (
+    'I60','I61','I62','I63','I64','I65','I66','I67','I68','I69',
+    'I23','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49',
+    'I51','I52' 
+) or
+substr(sub_sick,1,4) in (
+    'I210','I211','I212','I213','I214','I219','I220','I221','I228','I229',
+    'I200','I509','I469','R570'
+) or
+substr(sub_sick,1,3) in (
+    'I60','I61','I62','I63','I64','I65','I66','I67','I68','I69',
+    'I23','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49',
+    'I51','I52' 
+))
+group by t1.PERSON_ID;
+quit;
+ods csv close;
+
+
+/* Stroke: Major illness 사용*/
+proc sql;
+create table hra.stroke as 
+select person_id, recu_fr_dt, form_cd
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,3) in ('I63','G45') or substr(main_sick,1,4) in ('G461','G462') or
+substr(sub_sick,1,3) in ('I63','G45') or substr(sub_sick,1,4) in ('G460','G461','G462')
+union all
+select PERSON_ID, RECU_FR_DT, FORM_CD
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,3) in ('I63','G45') or substr(main_sick,1,4) in ('G461','G462') or
+substr(sub_sick,1,3) in ('I63','G45') or substr(sub_sick,1,4) in ('G460','G461','G462');
+quit;
+
+proc sql;
+create table hra.cvd_death as
+select jk.person_id, dth_mdy
+from raw.nhis_heals_jk as jk
+where substr(dth_code1,1,3) in ('I21','I22','I23','I63','G45','I62','I65','I67','I68','I20','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49','I51','I52','I64')
+quit;
+
+proc sql;
+create table hra.cvd_diag as
+select person_id, recu_fr_dt
+from raw.nhis_heals_gy20_t1
+where form_cd in ('02','07') and (substr(main_sick,1,3) in ('I21','I22','I23','I63','G45','I62','I65','I67','I68','I20','I24','I25','I26','I27','I28','I30','I31','I32','I33','I34','I35','I36','I37','I38','I39','I40','I41','I42','I43','I44','I45','I46','I47','I48','I49','I51','I52','I64')
+quit;
+
+
+proc sql;
+create table hra.heart_failure as
+select person_id, recu_fr_dt
+from raw.nhis_heals_gy20_t1
+where substr(main_sick,1,4) = 'I509' or substr(sub_sick,1,4) = 'I509'
+union all
+select person_id, recu_fr_dt
+from raw1619.nhis_heals_gy20_1619_t1
+where substr(main_sick,1,4) = 'I509' or substr(sub_sick,1,4) = 'I509';
+quit;
+
+proc sql;
+create table hra.angina as
+select person_id, recu_fr_dt
+from raw.nhis_heals_gy20_t1
+union all
+select person_id, recu_fr_dt
+from raw1619.nhis_heals_gy20_1619_t1
+quit;
+
+
+proc sql;
+create table hra.revasculization as
+select person_id, t1.recu_fr_dt
+from raw.nhis_heals_gy20_t1 as t1
+inner join raw.nhis_heals_gy30_t1 as t2 on t1.key_seq = t2.key_seq
+where substr(div_code,1,5) in ('HA670','HA680','HA681','HA682','M6551','M6552','M6561','M6562','M6563','M6465','M6571','M6572','M6634',
+'O1641','O1642','O1647','M6620','M6633','O2053','O2057','OA631','OA634','OA635','OB631','OB634','OB635')
+union all
+select person_id, recu_fr_dt
+from raw1619.nhis_heals_gy30_1619_t1 as t1
+inner join raw1619.nhis_heals_gy30_1619_t1 as t2 on t1.key_seq = t2.key_seq
+where substr(div_code,1,5) in ('HA670','HA680','HA681','HA682','M6551','M6552','M6561','M6562','M6563','M6465','M6571','M6572','M6634',
+'O1641','O1642','O1647','M6620','M6633','O2053','O2057','OA631','OA634','OA635','OB631','OB634','OB635');
+quit;
+
+
+
+
